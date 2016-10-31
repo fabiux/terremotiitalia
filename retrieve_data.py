@@ -15,8 +15,8 @@ months = {'12': 31, '11': 30, '10': 31, '09': 30, '08': 31, '07': 31, '06': 30, 
 for y in years:
     for m in months.keys():
         days = months[m]
-        if y in leapyears:
+        if (y in leapyears) and (m == '02'):
             days += 1
-        for d in range(1, days + 1):
-            save_events(get_events(y + '-' + m + '-' + ('0' + str(d))[-2:]))
-            sleep(20)
+        days = ('0' + str(days))[-2:]
+        save_events(get_events(month=y + '-' + m, daysinmonth=days))
+        sleep(20)
