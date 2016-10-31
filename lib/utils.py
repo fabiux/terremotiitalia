@@ -122,20 +122,25 @@ def get_magnitude(node):
     return None
 
 
-def get_events(day=None):
+def get_events(month=None, daysinmonth=None):
     """
     Get a list of events. Each event is a dict.
-    :param day: day (YYYY-MM-DD)
+    :param month: year-month (YYYY-MM)
+    :param daysinmonth: days in month (string)
     :return: list of events
     """
-    if day is None:
+    if month is None:
         fromdatetime = None
         todatetime = None
     else:
-        fromdatetime = day + 'T00:00:00'
-        todatetime = day + 'T23:59:59'
+        fromdatetime = month + '-01T00:00:00'
+        todatetime = month + '-' + daysinmonth + 'T23:59:59'
+
     result = []
-    r = ET.fromstring(get_xml(fromdatetime=fromdatetime, todatetime=todatetime))
+    try:
+        r = ET.fromstring(get_xml(fromdatetime=fromdatetime, todatetime=todatetime))
+    except Exception as e:
+        return result
     for item in r.iter('*'):
         if item.text is not None and not item.text.strip():
             if item.tag.split('}')[1] == 'event':  # new event

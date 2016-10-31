@@ -38,3 +38,5 @@ Example of a document stored in our <tt>MongoDB</tt> collection:
 - <tt><b>magnitude</b></tt>: magnitude of the event
 - <tt><b>time</b></tt>: UTC time of the event
 
+## Historical data
+A dump of historical data is coming soon here!
