@@ -15,6 +15,9 @@ It can be scheduled in <tt>/etc/crontab</tt> .
 ## <tt>retrieve_data.py</tt>
 This script retrieves old earthquake events in Italy from INGV Terremoti Italia.
 
+## <tt>export_to_csv.py</tt>
+This script exports data from <tt>MongoDB</tt> collection to <tt>CSV</tt> file.
+
 ## Data format
 Example of a document stored in our <tt>MongoDB</tt> collection:
 

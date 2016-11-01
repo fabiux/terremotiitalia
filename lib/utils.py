@@ -6,7 +6,7 @@ License: GNU/GPL version 3 (see file LICENSE)
 from lib.cfg import *
 import requests
 import xml.etree.ElementTree as ET
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 import datetime
 
 eq = MongoClient().ingv.earthquakes
@@ -163,3 +163,36 @@ def save_events(events):
             eq.insert_one(event)
         except Exception as e:
             pass
+
+
+def get_event_cursor(year=None):
+    """
+    Return a MongoDB cursor for events in the specified year.
+    :param year: year (None for all events in the collection)
+    :type year: int
+    :return: MongoDB cursor for selected events
+    """
+    qfilter = {}
+    if year is not None:
+        qfilter = {'time': {'$gte': datetime.datetime(year, 1, 1, 0, 0, 0),
+                            '$lt': datetime.datetime(year + 1, 1, 1, 0, 0, 0)}}
+    eq = MongoClient().ingv.earthquakes
+    try:
+        return eq.find(qfilter).sort('time', ASCENDING)
+    except Exception as e:
+        return None
+
+
+def get_row_for_csv(d):
+    """
+    Convert an event dict for saving a row in a CSV file.
+    :param d: event dict
+    :type d: dict
+    :return: converted event dict
+    """
+    return dict(id=d['_id'],
+                datetime=str(d['time'])[:19],
+                latitude=d['loc']['coordinates'][0],
+                longitude=d['loc']['coordinates'][1],
+                depth=d['depth'],
+                magnitude=d['magnitude'])
