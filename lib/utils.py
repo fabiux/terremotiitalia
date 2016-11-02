@@ -183,12 +183,13 @@ def get_event_cursor(year=None):
         return None
 
 
-def get_row_for_csv(d):
+def convert_row_for_csv(d):
     """
     Convert an event dict for saving a row in a CSV file.
-    :param d: event dict
+    See also: convert_row_for_mongo()
+    :param d: event dict from MongoDB collection
     :type d: dict
-    :return: converted event dict
+    :return: converted event dict (for CSV)
     """
     return dict(id=d['_id'],
                 datetime=str(d['time'])[:19],
@@ -196,3 +197,18 @@ def get_row_for_csv(d):
                 longitude=d['loc']['coordinates'][1],
                 depth=d['depth'],
                 magnitude=d['magnitude'])
+
+
+def convert_row_for_mongo(d):
+    """
+    Convert an event dict for saving a new doc in a MongoDB collection.
+    See also: convert_row_for_csv()
+    :param d: event dict from CSV file
+    :return: converted event dict (for MongoDB)
+    """
+    cd = dict(time=datetime.datetime.strptime(d['datetime'], '%Y-%m-%d %H:%M:%S'),
+              loc=dict(type='Point', coordinates=[float(d['latitude']), float(d['longitude'])]),
+              depth=float(d['depth']),
+              magnitude=float(d['magnitude']))
+    cd['_id'] = int(d['id'])
+    return cd
