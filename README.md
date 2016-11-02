@@ -18,6 +18,9 @@ This script retrieves old earthquake events in Italy from INGV Terremoti Italia.
 ## <tt>export_to_csv.py</tt>
 This script exports data from <tt>MongoDB</tt> collection to <tt>CSV</tt> file.
 
+## <tt>import_from_csv.py</tt>
+This script imports data from <tt>CSV</tt> file to <tt>MongoDB</tt> collection.
+
 ## Data format
 Example of a document stored in our <tt>MongoDB</tt> collection:
 
