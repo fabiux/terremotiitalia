@@ -212,3 +212,18 @@ def convert_row_for_mongo(d):
               magnitude=float(d['magnitude']))
     cd['_id'] = int(d['id'])
     return cd
+
+
+def get_feature(d):
+    """
+    Convert an event dict to a GeoJSON feature.
+    :param d: event dict from MongoDB collection
+    :type d: dict
+    :return: GeoJSON dict
+    """
+    # geometry dict
+    g = dict(type='Point',
+             coordinates=[d['loc']['coordinates'][1], d['loc']['coordinates'][0], -d['depth']])
+    # properties dict
+    p = dict(magnitude=d['magnitude'], datetime=str(d['time'])[:19].replace(' ', 'T') + 'Z')
+    return dict(type='Feature', geometry=g, properties=p)

@@ -21,6 +21,13 @@ This script exports data from <tt>MongoDB</tt> collection to <tt>CSV</tt> file.
 ## <tt>import_from_csv.py</tt>
 This script imports data from <tt>CSV</tt> file to <tt>MongoDB</tt> collection.
 
+## <tt>export_to_geojson.py</tt>
+This script exports data from <tt>MongoDB</tt> collection to <tt>GeoJSON</tt> file.
+
+Hypocenter depth is the third spatial coordinate (z-axis) under the sea level (meters).
+
+Datasets are actually large for a map representation: take a look at the code in order to customize your datasets.
+
 ## Data format
 Example of a document stored in our <tt>MongoDB</tt> collection:
 
