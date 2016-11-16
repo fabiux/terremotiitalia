@@ -52,4 +52,5 @@ Example of a document stored in our <tt>MongoDB</tt> collection:
 - <tt><b>time</b></tt>: UTC time of the event
 
 ## Historical data
-A dump of historical data is coming soon here!
+A dump of historical data is available [here](http://bit.ly/eqitalydata).
+

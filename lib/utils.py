@@ -106,8 +106,8 @@ def get_origin_data(node):
         if child.tag.split('}')[1] == 'origin':
             d['time'] = datetime.datetime.strptime(get_child_value(child, 'time')[:19], '%Y-%m-%dT%H:%M:%S')
             d['loc'] = {'type': 'Point',
-                        'coordinates': [float(get_child_value(child, 'latitude')),
-                                        float(get_child_value(child, 'longitude'))]}
+                        'coordinates': [float(get_child_value(child, 'longitude')),
+                                        float(get_child_value(child, 'latitude'))]}
             d['depth'] = float(get_child_value(child, 'depth'))
     return d
 
@@ -193,8 +193,8 @@ def convert_row_for_csv(d):
     """
     return dict(id=d['_id'],
                 datetime=str(d['time'])[:19],
-                latitude=d['loc']['coordinates'][0],
-                longitude=d['loc']['coordinates'][1],
+                longitude=d['loc']['coordinates'][0],
+                latitude=d['loc']['coordinates'][1],
                 depth=d['depth'],
                 magnitude=d['magnitude'])
 
@@ -207,7 +207,7 @@ def convert_row_for_mongo(d):
     :return: converted event dict (for MongoDB)
     """
     cd = dict(time=datetime.datetime.strptime(d['datetime'], '%Y-%m-%d %H:%M:%S'),
-              loc=dict(type='Point', coordinates=[float(d['latitude']), float(d['longitude'])]),
+              loc=dict(type='Point', coordinates=[float(d['longitude']), float(d['latitude'])]),
               depth=float(d['depth']),
               magnitude=float(d['magnitude']))
     cd['_id'] = int(d['id'])
@@ -223,7 +223,7 @@ def get_feature(d):
     """
     # geometry dict
     g = dict(type='Point',
-             coordinates=[d['loc']['coordinates'][1], d['loc']['coordinates'][0], -d['depth']])
+             coordinates=[d['loc']['coordinates'][0], d['loc']['coordinates'][1], -d['depth']])
     # properties dict
     p = dict(magnitude=d['magnitude'], datetime=str(d['time'])[:19].replace(' ', 'T') + 'Z')
     return dict(type='Feature', geometry=g, properties=p)
