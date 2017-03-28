@@ -165,17 +165,28 @@ def save_events(events):
             pass
 
 
-def get_event_cursor(year=None):
+def get_event_cursor(year=None, month=None):
     """
     Return a MongoDB cursor for events in the specified year.
     :param year: year (None for all events in the collection)
     :type year: int
+    :param month: month (None for all events in the specified year)
+    :type month: int
     :return: MongoDB cursor for selected events
     """
     qfilter = {}
     if year is not None:
-        qfilter = {'time': {'$gte': datetime.datetime(year, 1, 1, 0, 0, 0),
-                            '$lt': datetime.datetime(year + 1, 1, 1, 0, 0, 0)}}
+        if month is not None:
+            y2 = year
+            m2 = month + 1
+            if m2 > 12:
+                m2 = 1
+                y2 += 1
+            qfilter = {'time': {'$gte': datetime.datetime(year, month, 1, 0, 0, 0),
+                                '$lt': datetime.datetime(y2, m2, 1, 0, 0, 0)}}
+        else:
+            qfilter = {'time': {'$gte': datetime.datetime(year, 1, 1, 0, 0, 0),
+                                '$lt': datetime.datetime(year + 1, 1, 1, 0, 0, 0)}}
     eq = MongoClient().ingv.earthquakes
     try:
         return eq.find(qfilter).sort('time', ASCENDING)

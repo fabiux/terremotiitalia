@@ -16,11 +16,15 @@ if __name__ != '__main__':
     exit()
 
 year = None if len(argv) < 2 else int(argv[1])
+month = None if len(argv) < 3 else int(argv[2])
 if year is None:
     fname = 'eqitaly_all.csv'
 else:
-    fname = 'eqitaly_' + str(year) + '.csv'
-res = get_event_cursor(year)
+    if month is None:
+        fname = 'eqitaly_' + str(year) + '.csv'
+    else:
+        fname = 'eqitaly_' + str(year) + '_' + ('0' + str(month))[-2:] + '.csv'
+res = get_event_cursor(year, month)
 with open(fname, 'wb') as f:
     writer = DictWriter(f, fieldnames=csv_fieldnames, quotechar='"', quoting=QUOTE_NONNUMERIC)
     writer.writeheader()
