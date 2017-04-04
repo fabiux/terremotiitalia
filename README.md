@@ -3,7 +3,7 @@
 <em>Author: Fabio Pani - <tt>fabiux AT fabiopani DOT it</tt></em><br />
 <em>License: GNU/GPL v.3 (see file <tt>LICENSE</tt>)</em>
 
-This is a <em>quick and dirty</em> data retriever for earthquakes in Italy written in Python, using [INGV](http://www.ingv.it/) public web services.
+This is a data retriever for earthquakes in Italy written in Python, using [INGV](http://www.ingv.it/) public web services.
 
 This script can be scheduled on your <tt>/etc/crontab</tt>. It saves a small subset of significant data about latest earthquakes in Italy in a <tt>MongoDB</tt> collection.
 

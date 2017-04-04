@@ -8,6 +8,7 @@ import requests
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient, ASCENDING
 import datetime
+from calendar import monthrange
 
 eq = MongoClient().ingv.earthquakes
 
@@ -122,19 +123,22 @@ def get_magnitude(node):
     return None
 
 
-def get_events(month=None, daysinmonth=None):
+def get_events(year=None, month=1):
     """
     Get a list of events. Each event is a dict.
-    :param month: year-month (YYYY-MM)
-    :param daysinmonth: days in month (string)
+    :param year: year
+    :type year: int
+    :param month: month
+    :type month: int
     :return: list of events
     """
-    if month is None:
+    if year is None:
         fromdatetime = None
         todatetime = None
     else:
-        fromdatetime = month + '-01T00:00:00'
-        todatetime = month + '-' + daysinmonth + 'T23:59:59'
+        m = ('0' + str(month))[-2:]
+        fromdatetime = str(year) + '-' + m + '-01T00:00:00'
+        todatetime = str(year) + '-' + m + '-' + str(monthrange(year, month)[1]) + 'T23:59:59'
 
     result = []
     try:
