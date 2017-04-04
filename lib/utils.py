@@ -25,11 +25,13 @@ def get_last_event_date():
     return str(eq.find_one(sort=[('time', -1)])['time'] + datetime.timedelta(0, 1))[:19].replace(' ', 'T')
 
 
-def get_url(fromdatetime=None, todatetime=None):
+def get_url(fromdatetime=None, todatetime=None, limits=True):
     """
     Compose and return web service URL.
     :param fromdatetime: initial date and time (YYYY-MM-DDTHH:MM:SS)
     :param todatetime: final date and time (YYYY-MM-DDTHH:MM:SS - None is today)
+    :param limits: use configured limits (magnitude and coordinates) set in config file
+    :type limits: bool
     :return: URL
     """
     if fromdatetime is None:
@@ -38,19 +40,24 @@ def get_url(fromdatetime=None, todatetime=None):
     if todatetime is None:
         todatetime = get_end_of_today()
 
-    return 'http://webservices.ingv.it/fdsnws/event/1/query?starttime=' + fromdatetime + '&endtime=' + todatetime +\
-           '&minmag=' + minmag + '&maxmag=10&mindepth=0&maxdepth=1000&minlat=' + minlat + '&maxlat=' + maxlat +\
-           '&minlon=' + minlon + '&maxlon=' + maxlon + '&format=xml'
+    url = 'http://webservices.ingv.it/fdsnws/event/1/query?starttime=' + fromdatetime + '&endtime=' + todatetime
+    if limits:
+        url += '&minmag=' + minmag + '&maxmag=10&mindepth=0&maxdepth=1000&minlat=' + minlat + '&maxlat=' + maxlat + \
+               '&minlon=' + minlon + '&maxlon=' + maxlon + '&format=xml'
+
+    return url
 
 
-def get_xml(fromdatetime=None, todatetime=None):
+def get_xml(fromdatetime=None, todatetime=None, limits=True):
     """
     Get remote XML.
     :param fromdatetime: initial date and time (YYYY-MM-DDTHH:MM:SS)
     :param todatetime: final date and time (YYYY-MM-DDTHH:MM:SS - None is today)
+    :param limits: use configured limits (magnitude and coordinates) set in config file
+    :type limits: bool
     :return: XML (string)
     """
-    r = requests.get(get_url(fromdatetime=fromdatetime, todatetime=todatetime))
+    r = requests.get(get_url(fromdatetime=fromdatetime, todatetime=todatetime, limits=limits))
     if r.status_code == 200:
         return r.text
     return ''
@@ -123,13 +130,15 @@ def get_magnitude(node):
     return None
 
 
-def get_events(year=None, month=1):
+def get_events(year=None, month=1, limits=True):
     """
     Get a list of events. Each event is a dict.
     :param year: year
     :type year: int
     :param month: month
     :type month: int
+    :param limits: use configured limits (magnitude and coordinates) set in config file
+    :type limits: bool
     :return: list of events
     """
     if year is None:
@@ -142,7 +151,7 @@ def get_events(year=None, month=1):
 
     result = []
     try:
-        r = ET.fromstring(get_xml(fromdatetime=fromdatetime, todatetime=todatetime))
+        r = ET.fromstring(get_xml(fromdatetime=fromdatetime, todatetime=todatetime, limits=limits))
     except Exception as e:
         return result
     for item in r.iter('*'):
