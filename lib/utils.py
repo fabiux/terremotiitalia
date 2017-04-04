@@ -29,7 +29,9 @@ def get_url(fromdatetime=None, todatetime=None, limits=True):
     """
     Compose and return web service URL.
     :param fromdatetime: initial date and time (YYYY-MM-DDTHH:MM:SS)
+    :type fromdatetime: str
     :param todatetime: final date and time (YYYY-MM-DDTHH:MM:SS - None is today)
+    :type todatetime: str
     :param limits: use configured limits (magnitude and coordinates) set in config file
     :type limits: bool
     :return: URL
@@ -52,7 +54,9 @@ def get_xml(fromdatetime=None, todatetime=None, limits=True):
     """
     Get remote XML.
     :param fromdatetime: initial date and time (YYYY-MM-DDTHH:MM:SS)
+    :type fromdatetime: str
     :param todatetime: final date and time (YYYY-MM-DDTHH:MM:SS - None is today)
+    :type todatetime: str
     :param limits: use configured limits (magnitude and coordinates) set in config file
     :type limits: bool
     :return: XML (string)
@@ -91,14 +95,6 @@ def is_hypocenter(node):
         if child.tag.split('}')[1] == 'type':
             return child.text == 'hypocenter'
     return False
-
-
-# def is_ml(node):
-#     return True
-    # for child in node:
-    #     if child.tag.split('}')[1] == 'type':
-    #         return child.text == 'ML'
-    # return False
 
 
 def get_child_value(node, name):
@@ -170,6 +166,7 @@ def save_events(events):
     """
     Save a list of events on a MongoDB database.
     :param events: list ov events
+    :type events: list
     """
     for event in events:
         try:
@@ -228,6 +225,7 @@ def convert_row_for_mongo(d):
     Convert an event dict for saving a new doc in a MongoDB collection.
     See also: convert_row_for_csv()
     :param d: event dict from CSV file
+    :type d: dict
     :return: converted event dict (for MongoDB)
     """
     cd = dict(time=datetime.datetime.strptime(d['datetime'], '%Y-%m-%d %H:%M:%S'),
