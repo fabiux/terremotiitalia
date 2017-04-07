@@ -6,13 +6,12 @@ License: GNU/GPL version 3 (see file LICENSE)
 from lib.cfg import *
 import requests
 import xml.etree.ElementTree as ET
-from pymongo import MongoClient, ASCENDING
+from lib.cfg import eq
+from pymongo import ASCENDING
 import datetime
 from calendar import monthrange
 from xmltodict import parse
 from json import dumps
-
-eq = MongoClient().ingv.earthquakes
 
 
 def get_end_of_today():

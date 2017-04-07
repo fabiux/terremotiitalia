@@ -4,7 +4,6 @@ Author: Fabio Pani <fabiux AT fabiopani DOT it>
 License: GNU/GPL version 3 (see file LICENSE)
 """
 from sys import argv
-from pymongo import MongoClient
 from lib.utils import get_event_cursor, get_feature
 from json import dumps
 
@@ -18,7 +17,6 @@ else:
     fname = 'eqitaly_' + str(year) + '.json'
 
 features = []
-eq = MongoClient().ingv.earthquakes
 res = get_event_cursor(year)
 for item in res:
     features.append(get_feature(item))
