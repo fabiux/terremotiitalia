@@ -11,7 +11,7 @@ if __name__ != '__main__':
 
 if len(argv) > 2:
     save_events(get_events(year=int(argv[1]), month=int(argv[2])))
-if len(argv) > 1:
+elif len(argv) > 1:
     save_events(get_events(year=int(argv[1])))
 else:
     save_events(get_events())
