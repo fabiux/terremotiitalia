@@ -9,6 +9,8 @@ import xml.etree.ElementTree as ET
 from pymongo import MongoClient, ASCENDING
 import datetime
 from calendar import monthrange
+from xmltodict import parse
+from json import dumps
 
 eq = MongoClient().ingv.earthquakes
 
@@ -67,9 +69,23 @@ def get_xml(fromdatetime=None, todatetime=None, limits=True):
     return ''
 
 
-def get_xml_from_file():
-    with open('res.xml', 'rb') as f:
-        return ''.join(f.readlines())
+# def get_xml_from_file():
+#     with open('res.xml', 'rb') as f:
+#         return ''.join(f.readlines())
+
+
+def get_json(fromdatetime=None, todatetime=None, limits=True):
+    """
+    Get remote JSON (converted from remote XML).
+    :param fromdatetime:  initial date and time (YYYY-MM-DDTHH:MM:SS)
+    :type fromdatetime: str
+    :param todatetime: final date and time (YYYY-MM-DDTHH:MM:SS - None is today)
+    :type todatetime: str
+    :param limits: use configured limits (magnitude and coordinates) set in config file
+    :return: formatted JSON (string)
+    """
+    o = parse(get_xml(fromdatetime=fromdatetime, todatetime=todatetime, limits=limits))
+    return dumps(o, indent=4)
 
 
 def get_id(node):
